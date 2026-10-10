@@ -58,4 +58,5 @@ const MERA_PLAYLIST_LINKS = [
   { url: "https://youtu.be/H8g7_YNPQ_g?si=piqwmqotnySbgzg5", category: "Old Songs" },
   { url: "https://youtu.be/fa5Yzxdh8e4?si=HlIOzDa5iKTFDKoG", category: "Old Songs" },
   { url: "https://youtu.be/JLkCad_qAng?si=xOD6Ad6kPZyTQJTb", category: "Naat/Qawwali" },
+  { url: "https://youtu.be/KUfZSolnKW4?si=t5KbFlXKd6AiyrAv", category: "Naat/Qawwali" },
 ];
