@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===== SEO ===== -->
+<title>Mera Playlist — My Personal YouTube Player | Reehan MP</title>
+<meta name="description" content="Mera Playlist — a personal YouTube music/video player. Maintain your YouTube links in one file and enjoy them in a clean, distraction-free player. With dark and light mode.">
+<meta name="keywords" content="youtube playlist player, personal music player, youtube link player, mera playlist, offline playlist manager, single file youtube player, Reehan MP">
+<meta name="author" content="Reehan MP">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#120F17">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mera Playlist">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mera Playlist — My Personal YouTube Player">
+<meta property="og:description" content="Personal YouTube playlist player — maintain your links in one file, listen in the player. By Reehan MP.">
+<meta property="og:site_name" content="Mera Playlist">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mera Playlist — My Personal YouTube Player">
+<meta name="twitter:description" content="Personal YouTube playlist player by Reehan MP — dark/light mode, no backend.">
+
+<!-- ===== Favicon ===== -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSI0IiB5MT0iNCIgeDI9IjYwIiB5Mj0iNjAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iI0Y1QTYyMyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGNUU3RSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE2IiBmaWxsPSIjMTIwRjE3Ii8+CjxjaXJjbGUgY3g9IjMyIiBjeT0iMzIiIHI9IjIxIiBmaWxsPSJ1cmwoI2cpIi8+CjxjaXJjbGUgY3g9IjMyIiBjeT0iMzIiIHI9IjE0IiBmaWxsPSIjMUIxNjIzIi8+CjxjaXJjbGUgY3g9IjMyIiBjeT0iMzIiIHI9IjUuNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ===================== THEME TOKENS ===================== */
+  :root{
+    --bg: #120F17;
+    --surface: #1B1623;
+    --surface2: #241D2E;
+    --edge: #342B40;
+    --accent: #F5A623;
+    --accent-rgb: 245,166,35;
+    --accent2: #FF5E7E;
+    --accent2-rgb: 255,94,126;
+    --ink: #F5F0E6;
+    --muted: #9A8FA8;
+    --disc-hole: #1B1623;
+    --slider-track: #3B2F49;
+    --scheme: dark;
+  }
+  html[data-theme="light"]{
+    --bg: #F7F3EA;
+    --surface: #FFFFFF;
+    --surface2: #F1EADA;
+    --edge: #E3D8C0;
+    --accent: #C9791A;
+    --accent-rgb: 201,121,26;
+    --accent2: #D9426B;
+    --accent2-rgb: 217,66,107;
+    --ink: #241D2E;
+    --muted: #7A6E82;
+    --disc-hole: #FFFFFF;
+    --slider-track: #D9C9A3;
+    --scheme: light;
+  }
+  * { -webkit-tap-highlight-color: transparent; }
+  html { color-scheme: var(--scheme); }
+  body {
+    background:
+      radial-gradient(circle at 15% 0%, rgba(var(--accent-rgb),0.10), transparent 40%),
+      radial-gradient(circle at 90% 20%, rgba(var(--accent2-rgb),0.08), transparent 45%),
+      var(--bg);
+    transition: background-color .25s ease, color .25s ease;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  .scroller::-webkit-scrollbar { width: 6px; }
+  .scroller::-webkit-scrollbar-track { background: transparent; }
+  .scroller::-webkit-scrollbar-thumb { background: var(--edge); border-radius: 10px; }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    height: 4px; border-radius: 999px;
+    background: linear-gradient(to right, var(--accent) var(--fill,0%), var(--slider-track) var(--fill,0%));
+    outline: none; cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+    width:100%;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ink); border: 2px solid var(--accent);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.15);
+    cursor: pointer; transition: transform .15s ease;
+  }
+  input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.25); }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ink); border: 2px solid var(--accent); cursor: pointer;
+  }
+  input[type="range"]::-moz-range-track { background: transparent; }
+
+  .disc {
+    border-radius: 9999px; position: relative;
+    box-shadow: 0 0 0 6px var(--surface), 0 0 0 8px var(--edge), 0 20px 45px -15px rgba(0,0,0,0.45);
+    animation: spin 9s linear infinite;
+    animation-play-state: paused;
+    background-color: var(--surface2);
+  }
+  .disc.spinning { animation-play-state: running; }
+  .disc::after {
+    content: ''; position: absolute; inset: 0; margin: auto;
+    width: 22%; height: 22%; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--surface2), var(--disc-hole) 70%);
+    border: 3px solid var(--accent);
+  }
+  .disc-grooves {
+    position: absolute; inset: 0; border-radius: 9999px;
+    background: repeating-radial-gradient(circle, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 9px, rgba(0,0,0,0.16) 10px);
+    pointer-events: none;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+  .eq span { width: 3px; background: var(--accent); border-radius: 2px; animation: eqBounce 0.9s ease-in-out infinite; }
+  .eq span:nth-child(1) { animation-delay: 0s; height: 40%; }
+  .eq span:nth-child(2) { animation-delay: .15s; height: 100%; }
+  .eq span:nth-child(3) { animation-delay: .3s; height: 65%; }
+  @keyframes eqBounce { 0%,100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+  .eq.paused span { animation-play-state: paused; }
+
+  .track-row.active { background: linear-gradient(90deg, rgba(var(--accent-rgb),0.16), rgba(var(--accent-rgb),0.02)); border-color: rgba(var(--accent-rgb),0.45) !important; }
+
+  .theme-toggle .sun, .theme-toggle .moon { transition: opacity .2s ease, transform .3s ease; }
+  html[data-theme="dark"] .theme-toggle .sun { opacity: 0; transform: rotate(-60deg) scale(.6); position:absolute; }
+  html[data-theme="dark"] .theme-toggle .moon { opacity: 1; transform: rotate(0) scale(1); }
+  html[data-theme="light"] .theme-toggle .moon { opacity: 0; transform: rotate(60deg) scale(.6); position:absolute; }
+  html[data-theme="light"] .theme-toggle .sun { opacity: 1; transform: rotate(0) scale(1); }
+
+  @media (prefers-reduced-motion: reduce) { .disc, .eq span { animation: none !important; } }
+
+  .fade-in { animation: fadeIn .35s ease both; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+
+  .skeleton { background: linear-gradient(90deg, var(--surface2) 25%, var(--edge) 37%, var(--surface2) 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+  @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+  /* immersive background blur */
+  #bg-blur-image {
+    position: fixed; inset: -60px; z-index: -20;
+    background-size: cover; background-position: center;
+    filter: blur(70px) saturate(1.4) brightness(0.55);
+    opacity: 0; transition: opacity .8s ease;
+    pointer-events: none;
+  }
+  #bg-blur-tint {
+    position: fixed; inset: 0; z-index: -19;
+    background-color: var(--bg); opacity: 0.86;
+    pointer-events: none; transition: background-color .25s ease;
+  }
+
+  /* category filter chips */
+  .cat-chip {
+    white-space: nowrap; font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; border: 1px solid var(--edge);
+    color: var(--muted); background-color: var(--surface); cursor: pointer;
+    transition: all .15s ease; flex-shrink: 0;
+  }
+  .cat-chip.active { color: var(--bg); background-color: var(--accent); border-color: var(--accent); }
+  .chip-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+  .chip-scroll::-webkit-scrollbar { display: none; }
+
+  /* track row owner action icons */
+  .row-icon-btn {
+    width: 30px; height: 30px; border-radius: 8px; display:flex; align-items:center; justify-content:center;
+    color: var(--muted); transition: background-color .15s ease, color .15s ease; flex-shrink: 0;
+  }
+  .row-icon-btn:hover { background-color: var(--surface2); color: var(--ink); }
+  .row-icon-btn.danger:hover { color: var(--accent2); }
+
+  .cat-badge {
+    display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 8px; border-radius: 999px;
+    background-color: var(--surface2); color: var(--accent); margin-top: 3px;
+  }
+</style>
+</head>
+<body class="font-body min-h-screen pb-24 lg:pb-10" style="color:var(--ink)">
+
+<div id="bg-blur-image"></div>
+<div id="bg-blur-tint"></div>
+<div id="yt-player-mount" class="hidden"></div>
+
+<!-- ===== NAVBAR ===== -->
+<header class="border-b sticky top-0 z-30 backdrop-blur" style="border-color:var(--edge); background-color:color-mix(in srgb, var(--bg) 85%, transparent)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <div id="logo-trigger" class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-lg cursor-pointer select-none" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--bg)" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="min-w-0">
+        <h1 class="font-display font-semibold text-base sm:text-lg leading-none tracking-tight truncate">Mera Playlist</h1>
+        <p class="text-[11px] sm:text-xs mt-0.5 truncate" style="color:var(--muted)">Developed by ❤️ Reehan MP</p>
+      </div>
+    </div>
+    <nav class="flex items-center gap-2 sm:gap-3 shrink-0">
+      <span class="text-xs hidden sm:inline-flex items-center gap-1.5" style="color:var(--muted)">
+        <span id="track-count">0</span> tracks
+      </span>
+      <button id="install-btn" type="button" style="display:none;border-color:var(--accent);background-color:var(--surface);color:var(--accent)" class="items-center gap-1.5 h-9 px-3 rounded-full text-xs font-semibold border transition hover:brightness-110" aria-label="Install Mera Playlist as an app">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+        <span>Install</span>
+      </button>
+      <button id="theme-toggle" class="theme-toggle relative w-9 h-9 rounded-full flex items-center justify-center border transition hover:brightness-110" style="border-color:var(--edge); background-color:var(--surface)" title="Toggle theme" aria-label="Toggle dark/light theme">
+        <svg class="sun" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--accent)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--accent)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 items-start">
+
+  <!-- NOW PLAYING -->
+  <section class="lg:sticky lg:top-24">
+    <div class="rounded-2xl p-5 sm:p-6 border shadow-2xl" style="background-color:var(--surface); border-color:var(--edge); box-shadow:0 25px 50px -20px rgba(0,0,0,0.35)">
+      <div class="flex justify-center py-2">
+        <div id="swipe-zone" class="relative w-48 h-48 sm:w-56 sm:h-56" style="touch-action: pan-y;">
+          <div id="disc" class="disc w-full h-full bg-cover bg-center">
+            <div class="disc-grooves"></div>
+          </div>
+          <div id="swipe-hint" class="hidden absolute -bottom-2 left-1/2 -translate-x-1/2 text-[11px] font-medium px-2.5 py-1 rounded-full pointer-events-none" style="background-color:var(--surface2); color:var(--muted); opacity:0; transition: opacity .4s ease;">← swipe →</div>
+        </div>
+      </div>
+
+      <div class="mt-5 text-center px-1">
+        <p id="now-title" class="font-display font-semibold text-base sm:text-lg leading-snug line-clamp-2">Loading playlist&hellip;</p>
+        <p id="now-sub" class="text-xs mt-1" style="color:var(--muted)">Click any track to play</p>
+        <a id="now-error-link" href="#" target="_blank" rel="noopener" class="hidden text-xs underline mt-1 inline-block" style="color:var(--accent2)">Open directly on YouTube →</a>
+      </div>
+
+      <div class="mt-5">
+        <input id="seek" type="range" min="0" max="100" value="0" step="0.1">
+        <div class="flex justify-between text-[11px] mt-1.5 font-medium tabular-nums" style="color:var(--muted)">
+          <span id="time-current">0:00</span>
+          <span id="time-duration">0:00</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-3 sm:gap-4 mt-4">
+        <button id="btn-shuffle" title="Shuffle" style="color:var(--muted)" class="w-9 h-9 rounded-full flex items-center justify-center transition hover:opacity-80">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        </button>
+        <button id="btn-prev" title="Peeche" style="color:var(--ink)" class="w-11 h-11 rounded-full flex items-center justify-center transition hover:opacity-80">
+          <svg viewBox="0 0 24 24" style="width:22px;height:22px" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg>
+        </button>
+        <button id="btn-play" title="Play/Pause" class="w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition" style="background:linear-gradient(135deg,var(--accent),var(--accent2)); color:var(--bg)">
+          <svg id="icon-play" viewBox="0 0 24 24" style="width:26px;height:26px" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          <svg id="icon-pause" viewBox="0 0 24 24" style="width:26px;height:26px" fill="currentColor" class="hidden"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        </button>
+        <button id="btn-next" title="Aage" style="color:var(--ink)" class="w-11 h-11 rounded-full flex items-center justify-center transition hover:opacity-80">
+          <svg viewBox="0 0 24 24" style="width:22px;height:22px" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg>
+        </button>
+        <button id="btn-repeat" title="Repeat" style="color:var(--muted)" class="w-9 h-9 rounded-full flex items-center justify-center transition hover:opacity-80 relative">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span id="repeat-one-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style="background:var(--accent)"></span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 mt-6 px-1">
+        <button id="btn-mute" style="color:var(--muted)" class="hover:opacity-80 transition shrink-0">
+          <svg id="icon-vol" viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <svg id="icon-mute" viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </button>
+        <input id="volume" type="range" min="0" max="100" value="70" class="flex-1">
+        <span id="volume-val" class="text-[11px] w-8 text-right tabular-nums" style="color:var(--muted)">70</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYLIST -->
+  <section class="min-w-0">
+    <div class="flex items-center justify-between mb-3 px-1">
+      <h2 class="font-display font-semibold text-sm uppercase tracking-wide" style="color:var(--muted)">Playlist</h2>
+      <div class="flex items-center gap-3">
+        <button id="btn-add-toggle" class="hidden text-xs flex items-center gap-1.5 font-medium hover:opacity-80 transition" style="color:var(--accent)" title="Add a new link">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
+        <button id="btn-gh-settings" class="hidden w-6 h-6 flex items-center justify-center hover:opacity-80 transition" style="color:var(--muted)" title="GitHub connection settings">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <button id="btn-refresh" class="text-xs flex items-center gap-1.5 hover:opacity-80 transition" style="color:var(--muted)" title="Reload">
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- GitHub settings panel -->
+    <div id="gh-settings-panel" class="hidden rounded-2xl p-4 sm:p-5 border mb-4 space-y-3" style="background-color:var(--surface); border-color:var(--edge)">
+      <p class="text-sm font-medium">GitHub connection</p>
+      <p class="text-xs" style="color:var(--muted)">Set this up once. The token stays only in this browser's localStorage, nowhere else.</p>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div>
+          <label class="text-[11px] block mb-1" style="color:var(--muted)">GitHub username</label>
+          <input id="gh-owner" type="text" placeholder="Reehanpatil" class="w-full text-sm rounded-lg px-2.5 py-2 border focus:outline-none focus:ring-2" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">
+        </div>
+        <div>
+          <label class="text-[11px] block mb-1" style="color:var(--muted)">Repo name</label>
+          <input id="gh-repo" type="text" placeholder="sound" class="w-full text-sm rounded-lg px-2.5 py-2 border focus:outline-none focus:ring-2" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">
+        </div>
+        <div>
+          <label class="text-[11px] block mb-1" style="color:var(--muted)">Branch</label>
+          <input id="gh-branch" type="text" placeholder="main" class="w-full text-sm rounded-lg px-2.5 py-2 border focus:outline-none focus:ring-2" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">
+        </div>
+        <div>
+          <label class="text-[11px] block mb-1" style="color:var(--muted)">File path</label>
+          <input id="gh-path" type="text" placeholder="playlist-links.js" class="w-full text-sm rounded-lg px-2.5 py-2 border focus:outline-none focus:ring-2" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">
+        </div>
+      </div>
+      <div>
+        <label class="text-[11px] block mb-1" style="color:var(--muted)">Personal Access Token (with repo write access)</label>
+        <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full text-sm rounded-lg px-2.5 py-2 border focus:outline-none focus:ring-2 font-mono" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">
+      </div>
+      <div class="flex items-center justify-between gap-3 pt-1">
+        <p id="gh-settings-status" class="text-xs min-h-[16px]" style="color:var(--muted)"></p>
+        <button id="btn-gh-save" class="shrink-0 text-sm font-display font-semibold px-4 py-2 rounded-xl hover:brightness-110 active:scale-95 transition" style="background-color:var(--accent); color:var(--bg)">Save</button>
+      </div>
+    </div>
+
+    <!-- Add link panel -->
+    <div id="add-panel" class="hidden rounded-2xl p-4 sm:p-5 border mb-4" style="background-color:var(--surface); border-color:var(--edge)">
+      <label for="link-input" class="text-sm font-medium block mb-2">Add YouTube link(s)</label>
+      <textarea id="link-input" rows="3" placeholder="Paste one or more links, one per line" class="w-full text-sm rounded-xl px-3.5 py-3 border resize-none focus:outline-none focus:ring-2" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)"></textarea>
+      <div class="mt-3">
+        <label for="category-input" class="text-sm font-medium block mb-2">Category (all links will be added to this category)</label>
+        <input id="category-input" list="category-suggestions" type="text" placeholder="e.g. Old Songs, Naat/Qawwali, Kannada, Quran Sureh" class="w-full text-sm rounded-xl px-3.5 py-2.5 border focus:outline-none focus:ring-2" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">
+        <datalist id="category-suggestions"></datalist>
+      </div>
+      <div class="flex items-center justify-between mt-3 gap-3">
+        <p id="add-status" class="text-xs flex-1 min-h-[16px]" style="color:var(--muted)"></p>
+        <button id="btn-push" class="shrink-0 inline-flex items-center gap-1.5 font-display font-semibold text-sm px-4 py-2.5 rounded-xl hover:brightness-110 active:scale-95 transition" style="background-color:var(--accent); color:var(--bg)">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          GitHub par push karo
+        </button>
+      </div>
+    </div>
+
+    <!-- category filter chips -->
+    <div id="category-filters" class="hidden flex gap-2 overflow-x-auto chip-scroll mb-4 -mx-1 px-1"></div>
+
+    <div id="empty-state" class="border border-dashed rounded-2xl py-12 px-6 text-center hidden" style="border-color:var(--edge)">
+      <svg viewBox="0 0 24 24" style="width:32px;height:32px" class="mx-auto mb-3" style="color:var(--muted)" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      <p class="text-sm" style="color:var(--muted)"><code class="font-mono text-xs" style="color:var(--accent)">playlist-links.js</code> has no links yet.<br>Use the "Add" button above, or open the file to add links.</p>
+    </div>
+
+    <ul id="track-list" class="space-y-2"></ul>
+  </section>
+</main>
+
+<!-- mobile mini player -->
+<div id="mini-player" class="lg:hidden hidden fixed bottom-0 inset-x-0 z-40 backdrop-blur border-t" style="background-color:color-mix(in srgb, var(--surface) 95%, transparent); border-color:var(--edge)">
+  <div class="h-0.5 relative overflow-hidden" style="background-color:var(--edge)">
+    <div id="mini-progress" class="h-full" style="width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+  </div>
+  <div class="flex items-center gap-3 px-3 py-2.5">
+    <div id="mini-thumb" class="w-9 h-9 rounded-lg bg-cover bg-center shrink-0" style="background-color:var(--surface2)"></div>
+    <div class="min-w-0 flex-1">
+      <p id="mini-title" class="text-xs font-medium truncate">—</p>
+    </div>
+    <button id="mini-prev" class="p-1.5" style="color:var(--ink)"><svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg></button>
+    <button id="mini-play" class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background-color:var(--accent); color:var(--bg)">
+      <svg id="mini-icon-play" viewBox="0 0 24 24" style="width:16px;height:16px" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      <svg id="mini-icon-pause" viewBox="0 0 24 24" style="width:16px;height:16px" fill="currentColor" class="hidden"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+    </button>
+    <button id="mini-next" class="p-1.5" style="color:var(--ink)"><svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg></button>
+  </div>
+</div>
+
+<!-- ===== Playlist data file (edit this to add links) ===== -->
+<script src="playlist-links.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  const TITLE_CACHE_KEY = "meraPlaylistTitleCache_v1";
+  const GITHUB_CFG_KEY = "meraPlaylistGithubCfg_v1";
+  const THEME_KEY = "meraPlaylistTheme_v1";
+  const PREF_KEY = "meraPlaylistPrefs_v1";
+
+  let tracks = [];
+  let currentIndex = -1;
+  let player = null;
+  let playerReady = false;
+  let isSeeking = false;
+  let progressTimer = null;
+  let repeatMode = "off";
+  let shuffleOn = false;
+  let lastVolume = 70;
+  let ownerUnlocked = false;
+  let activeCategory = "Sab";
+  let editingIndex = -1;
+
+  const SUGGESTED_CATEGORIES = ["Old Songs", "Naat/Qawwali", "Kannada", "Quran Sureh", "Devotional", "Study", "Others"];
+  const DEFAULT_CATEGORY = "Others";
+
+  // ---------- theme ----------
+  const htmlEl = document.documentElement;
+  function applyTheme(t){
+    htmlEl.setAttribute("data-theme", t);
+    localStorage.setItem(THEME_KEY, t);
+  }
+  (function initTheme(){
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) applyTheme(saved);
+    else applyTheme(window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  })();
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    applyTheme(htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+
+  // ---------- prefs ----------
+  function loadPrefs(){
+    try{
+      const p = JSON.parse(localStorage.getItem(PREF_KEY)) || {};
+      if (typeof p.volume === "number") volumeEl.value = p.volume;
+      if (p.repeatMode) repeatMode = p.repeatMode;
+      if (typeof p.shuffleOn === "boolean") shuffleOn = p.shuffleOn;
+    } catch(e){}
+  }
+  function savePrefs(){
+    localStorage.setItem(PREF_KEY, JSON.stringify({ volume: Number(volumeEl.value), repeatMode, shuffleOn }));
+  }
+  function loadTitleCache(){
+    try { return JSON.parse(localStorage.getItem(TITLE_CACHE_KEY)) || {}; } catch(e){ return {}; }
+  }
+  function saveTitleCache(cache){
+    localStorage.setItem(TITLE_CACHE_KEY, JSON.stringify(cache));
+  }
+
+  // ---------- dom refs ----------
+  const trackList = document.getElementById("track-list");
+  const trackCount = document.getElementById("track-count");
+  const emptyState = document.getElementById("empty-state");
+  const btnRefresh = document.getElementById("btn-refresh");
+
+  const btnAddToggle = document.getElementById("btn-add-toggle");
+  const addPanel = document.getElementById("add-panel");
+  const linkInput = document.getElementById("link-input");
+  const addStatus = document.getElementById("add-status");
+  const btnPush = document.getElementById("btn-push");
+
+  const btnGhSettings = document.getElementById("btn-gh-settings");
+  const ghSettingsPanel = document.getElementById("gh-settings-panel");
+  const ghOwnerEl = document.getElementById("gh-owner");
+  const ghRepoEl = document.getElementById("gh-repo");
+  const ghBranchEl = document.getElementById("gh-branch");
+  const ghPathEl = document.getElementById("gh-path");
+  const ghTokenEl = document.getElementById("gh-token");
+  const ghSettingsStatus = document.getElementById("gh-settings-status");
+  const btnGhSave = document.getElementById("btn-gh-save");
+
+  const categoryInput = document.getElementById("category-input");
+  const categorySuggestions = document.getElementById("category-suggestions");
+  const categoryFilters = document.getElementById("category-filters");
+  const bgBlurImage = document.getElementById("bg-blur-image");
+
+  const discEl = document.getElementById("disc");
+  const nowTitle = document.getElementById("now-title");
+  const nowSub = document.getElementById("now-sub");
+  const nowErrorLink = document.getElementById("now-error-link");
+  const seekEl = document.getElementById("seek");
+  const timeCurrent = document.getElementById("time-current");
+  const timeDuration = document.getElementById("time-duration");
+
+  const btnPlay = document.getElementById("btn-play");
+  const iconPlay = document.getElementById("icon-play");
+  const iconPause = document.getElementById("icon-pause");
+  const btnPrev = document.getElementById("btn-prev");
+  const btnNext = document.getElementById("btn-next");
+  const btnShuffle = document.getElementById("btn-shuffle");
+  const btnRepeat = document.getElementById("btn-repeat");
+  const repeatOneDot = document.getElementById("repeat-one-dot");
+
+  const btnMute = document.getElementById("btn-mute");
+  const iconVol = document.getElementById("icon-vol");
+  const iconMute = document.getElementById("icon-mute");
+  const volumeEl = document.getElementById("volume");
+  const volumeVal = document.getElementById("volume-val");
+
+  const miniPlayer = document.getElementById("mini-player");
+  const miniThumb = document.getElementById("mini-thumb");
+  const miniTitle = document.getElementById("mini-title");
+  const miniPlay = document.getElementById("mini-play");
+  const miniIconPlay = document.getElementById("mini-icon-play");
+  const miniIconPause = document.getElementById("mini-icon-pause");
+  const miniPrev = document.getElementById("mini-prev");
+  const miniNext = document.getElementById("mini-next");
+  const miniProgress = document.getElementById("mini-progress");
+
+  // ---------- secret unlock (owner-only add/settings controls) ----------
+  const UNLOCK_KEY = "meraPlaylistUnlocked_v1";
+  const logoTrigger = document.getElementById("logo-trigger");
+  let clickTimes = [];
+
+  function setOwnerControlsVisible(visible){
+    ownerUnlocked = visible;
+    btnAddToggle.classList.toggle("hidden", !visible);
+    btnGhSettings.classList.toggle("hidden", !visible);
+    render();
+  }
+
+  if (localStorage.getItem(UNLOCK_KEY) === "1"){
+    setOwnerControlsVisible(true);
+  }
+
+  logoTrigger.addEventListener("click", () => {
+    const now = Date.now();
+    clickTimes = clickTimes.filter(t => now - t < 1500);
+    clickTimes.push(now);
+    if (clickTimes.length >= 5){
+      clickTimes = [];
+      const alreadyUnlocked = localStorage.getItem(UNLOCK_KEY) === "1";
+      if (alreadyUnlocked){
+        localStorage.removeItem(UNLOCK_KEY);
+        setOwnerControlsVisible(false);
+        addPanel.classList.add("hidden");
+        ghSettingsPanel.classList.add("hidden");
+      } else {
+        localStorage.setItem(UNLOCK_KEY, "1");
+        setOwnerControlsVisible(true);
+      }
+    }
+  });
+
+  // ---------- github config ----------
+  function loadGhConfig(){
+    try { return JSON.parse(localStorage.getItem(GITHUB_CFG_KEY)) || {}; } catch(e){ return {}; }
+  }
+  function saveGhConfig(cfg){
+    localStorage.setItem(GITHUB_CFG_KEY, JSON.stringify(cfg));
+  }
+  function fillGhForm(){
+    const cfg = loadGhConfig();
+    ghOwnerEl.value = cfg.owner || "";
+    ghRepoEl.value = cfg.repo || "";
+    ghBranchEl.value = cfg.branch || "main";
+    ghPathEl.value = cfg.path || "playlist-links.js";
+    ghTokenEl.value = cfg.token || "";
+  }
+  fillGhForm();
+
+  btnGhSettings.addEventListener("click", () => {
+    ghSettingsPanel.classList.toggle("hidden");
+    addPanel.classList.add("hidden");
+  });
+  btnGhSave.addEventListener("click", () => {
+    const cfg = {
+      owner: ghOwnerEl.value.trim(),
+      repo: ghRepoEl.value.trim(),
+      branch: ghBranchEl.value.trim() || "main",
+      path: ghPathEl.value.trim() || "playlist-links.js",
+      token: ghTokenEl.value.trim()
+    };
+    if (!cfg.owner || !cfg.repo || !cfg.token){
+      ghSettingsStatus.textContent = "Username, repo, and token are required.";
+      ghSettingsStatus.style.color = "var(--accent2)";
+      return;
+    }
+    saveGhConfig(cfg);
+    ghSettingsStatus.textContent = "Saved ✓ you can now push links using 'Add'.";
+    ghSettingsStatus.style.color = "var(--accent)";
+    setTimeout(() => { ghSettingsStatus.textContent = ""; }, 3000);
+  });
+
+  btnAddToggle.addEventListener("click", () => {
+    addPanel.classList.toggle("hidden");
+    ghSettingsPanel.classList.add("hidden");
+  });
+
+  // ---------- categories ----------
+  const LAST_CATEGORY_KEY = "meraPlaylistLastCategory_v1";
+  function saveLastCategory(cat){ localStorage.setItem(LAST_CATEGORY_KEY, cat); }
+  function fillCategorySuggestions(){
+    const dynamic = Array.from(new Set(tracks.map(t => t.category || DEFAULT_CATEGORY)));
+    const all = Array.from(new Set([...SUGGESTED_CATEGORIES, ...dynamic]));
+    categorySuggestions.innerHTML = all.map(c => `<option value="${escapeHtml(c)}"></option>`).join("");
+  }
+  categoryInput.value = localStorage.getItem(LAST_CATEGORY_KEY) || "";
+
+  // encode/decode helpers (UTF-8 safe base64, needed for Hindi comments in the file)
+  function utf8ToBase64(str){
+    const bytes = new TextEncoder().encode(str);
+    let binary = "";
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary);
+  }
+  function base64ToUtf8(b64){
+    const binary = atob(b64.replace(/\n/g, ""));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function insertLinksIntoFileContent(content, newEntries){
+    const entries = parseEntriesFromFileContent(content);
+    const merged = entries.concat(newEntries);
+    return replaceArrayInFileContent(content, merged);
+  }
+
+  // parse "MERA_PLAYLIST_LINKS = [ ... ];" body into {url, category} entries.
+  // supports both new object entries and old plain-string entries (which get a default category).
+  function parseEntriesFromFileContent(content){
+    const startIdx = content.indexOf("MERA_PLAYLIST_LINKS");
+    const openIdx = content.indexOf("[", startIdx);
+    const closeIdx = content.lastIndexOf("];");
+    if (startIdx === -1 || openIdx === -1 || closeIdx === -1) throw new Error("MERA_PLAYLIST_LINKS array not found in the file.");
+    const body = content.slice(openIdx + 1, closeIdx);
+
+    const entries = [];
+    const entryRegex = /\{\s*url:\s*"((?:\\.|[^"\\])*)"\s*,\s*category:\s*"((?:\\.|[^"\\])*)"\s*\}|"((?:\\.|[^"\\])*)"/g;
+    let m;
+    while ((m = entryRegex.exec(body)) !== null){
+      if (m[1] !== undefined){
+        entries.push({ url: unescapeStr(m[1]), category: unescapeStr(m[2]) || DEFAULT_CATEGORY });
+      } else if (m[3] !== undefined){
+        entries.push({ url: unescapeStr(m[3]), category: DEFAULT_CATEGORY });
+      }
+    }
+    return entries;
+  }
+
+  function serializeEntriesToArrayText(entries){
+    if (!entries.length) return "\n";
+    return "\n" + entries.map(en =>
+      `  { url: "${escapeStr(en.url)}", category: "${escapeStr(en.category || DEFAULT_CATEGORY)}" },\n`
+    ).join("");
+  }
+
+  function replaceArrayInFileContent(content, entries){
+    const startIdx = content.indexOf("MERA_PLAYLIST_LINKS");
+    const openIdx = content.indexOf("[", startIdx);
+    const closeIdx = content.lastIndexOf("];");
+    if (startIdx === -1 || openIdx === -1 || closeIdx === -1) throw new Error("MERA_PLAYLIST_LINKS array not found in the file.");
+    return content.slice(0, openIdx + 1) + serializeEntriesToArrayText(entries) + content.slice(closeIdx);
+  }
+
+  function escapeStr(s){ return String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"'); }
+  function unescapeStr(s){ return String(s).replace(/\\"/g, '"').replace(/\\\\/g, "\\"); }
+
+  async function pushToGithub(mutateEntries, commitMessage, statusEl){
+    const cfg = loadGhConfig();
+    if (!cfg.owner || !cfg.repo || !cfg.token){
+      statusEl.textContent = "Fill in GitHub settings (⚙) first.";
+      statusEl.style.color = "var(--accent2)";
+      ghSettingsPanel.classList.remove("hidden");
+      return false;
+    }
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+    try{
+      statusEl.textContent = "Fetching file from GitHub...";
+      statusEl.style.color = "var(--muted)";
+      const getRes = await fetch(`${apiBase}?ref=${encodeURIComponent(cfg.branch)}`, {
+        headers: { Authorization: `token ${cfg.token}`, Accept: "application/vnd.github+json" }
+      });
+      if (!getRes.ok){
+        const errBody = await getRes.json().catch(() => ({}));
+        throw new Error(`Could not read file (${getRes.status}): ${errBody.message || "check owner/repo/token/path"}`);
+      }
+      const fileData = await getRes.json();
+      const currentContent = base64ToUtf8(fileData.content);
+      const entries = parseEntriesFromFileContent(currentContent);
+      const newEntries = mutateEntries(entries);
+      const updatedContent = replaceArrayInFileContent(currentContent, newEntries);
+
+      statusEl.textContent = "Pushing to GitHub...";
+      const putRes = await fetch(apiBase, {
+        method: "PUT",
+        headers: { Authorization: `token ${cfg.token}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: commitMessage,
+          content: utf8ToBase64(updatedContent),
+          sha: fileData.sha,
+          branch: cfg.branch
+        })
+      });
+      if (!putRes.ok){
+        const errBody = await putRes.json().catch(() => ({}));
+        throw new Error(`Push failed (${putRes.status}): ${errBody.message || "unknown error"}`);
+      }
+      return true;
+    } catch(e){
+      statusEl.textContent = e.message || "Something went wrong.";
+      statusEl.style.color = "var(--accent2)";
+      return false;
+    }
+  }
+
+  function pushLinksToGithub(newEntries){
+    return pushToGithub(entries => entries.concat(newEntries), `Add ${newEntries.length} track(s) via Mera Playlist`, addStatus);
+  }
+  function removeEntryFromGithub(videoId){
+    return pushToGithub(
+      entries => entries.filter(en => extractVideoId(extractUrl(en.url)) !== videoId),
+      "Remove track via Mera Playlist",
+      addStatus
+    );
+  }
+  function updateCategoryOnGithub(videoId, newCategory){
+    return pushToGithub(
+      entries => entries.map(en => extractVideoId(extractUrl(en.url)) === videoId ? { url: en.url, category: newCategory } : en),
+      "Update category via Mera Playlist",
+      addStatus
+    );
+  }
+
+  btnPush.addEventListener("click", handlePush);
+  linkInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handlePush();
+  });
+
+  async function handlePush(){
+    const raw = linkInput.value.trim();
+    if (!raw){ addStatus.textContent = "Paste a link first."; addStatus.style.color = "var(--accent2)"; return; }
+    const category = (categoryInput.value.trim() || DEFAULT_CATEGORY);
+    const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+
+    const seenInBatch = new Set();
+    const duplicates = [];
+    const freshEntries = [];
+    for (const line of lines){
+      const id = extractVideoId(extractUrl(line));
+      if (!id) continue;
+      const alreadyInPlaylist = tracks.some(t => t.videoId === id);
+      const alreadyInBatch = seenInBatch.has(id);
+      if (alreadyInPlaylist || alreadyInBatch){ duplicates.push(id); continue; }
+      seenInBatch.add(id);
+      freshEntries.push({ url: line, category });
+    }
+
+    if (!freshEntries.length && !duplicates.length){
+      addStatus.textContent = "No valid YouTube link found.";
+      addStatus.style.color = "var(--accent2)";
+      return;
+    }
+    if (!freshEntries.length && duplicates.length){
+      addStatus.textContent = `All ${duplicates.length} link(s) are already in the playlist — nothing new was added.`;
+      addStatus.style.color = "var(--accent2)";
+      return;
+    }
+
+    btnPush.disabled = true;
+    if (duplicates.length){
+      addStatus.textContent = `${duplicates.length} link(s) were already in the playlist and skipped. Pushing ${freshEntries.length} new one(s)...`;
+      addStatus.style.color = "var(--muted)";
+    }
+    const ok = await pushLinksToGithub(freshEntries);
+    btnPush.disabled = false;
+
+    if (ok){
+      const dupNote = duplicates.length ? ` (${duplicates.length} duplicate skip kiye)` : "";
+      addStatus.textContent = `${freshEntries.length} track(s) pushed to GitHub ✓${dupNote} Will be live on Netlify in ~1 min.`;
+      addStatus.style.color = "var(--accent)";
+      linkInput.value = "";
+      saveLastCategory(category);
+      // optimistically add locally so it's playable right away
+      for (const en of freshEntries){
+        const id = extractVideoId(extractUrl(en.url));
+        if (id && !tracks.some(t => t.videoId === id)){
+          tracks.push({ videoId: id, category: en.category, title: "Loading…", thumb: `https://img.youtube.com/vi/${id}/hqdefault.jpg`, loading: true });
+        }
+      }
+      renderCategoryFilters();
+      render();
+      const cache = loadTitleCache();
+      await Promise.all(tracks.filter(t => t.loading).map(async (t) => { t.title = await fetchTitle(t.videoId, cache); t.loading = false; }));
+      saveTitleCache(cache);
+      render();
+    }
+  }
+
+  // ---------- link parsing ----------
+  function extractUrl(raw){
+    const md = raw.match(/\((https?:\/\/[^\)]+)\)/);
+    if (md) return md[1];
+    return raw.trim();
+  }
+  function extractVideoId(url){
+    try{
+      url = url.trim();
+      const patterns = [
+        /(?:youtu\.be\/)([A-Za-z0-9_-]{11})/,
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{11})/,
+        /[?&]v=([A-Za-z0-9_-]{11})/
+      ];
+      for (const re of patterns){
+        const m = url.match(re);
+        if (m) return m[1];
+      }
+      if (/^[A-Za-z0-9_-]{11}$/.test(url)) return url;
+      return null;
+    } catch(e){ return null; }
+  }
+
+  function fmtTime(sec){
+    if (!isFinite(sec) || sec < 0) sec = 0;
+    const m = Math.floor(sec/60);
+    const s = Math.floor(sec%60).toString().padStart(2,"0");
+    return `${m}:${s}`;
+  }
+
+  async function fetchTitle(videoId, cache){
+    if (cache[videoId] && cache[videoId].title) return cache[videoId].title;
+    try{
+      const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent("https://www.youtube.com/watch?v="+videoId)}&format=json`);
+      if (!res.ok) throw new Error("oembed fail");
+      const data = await res.json();
+      const title = data.title || "YouTube Video";
+      cache[videoId] = { title, cachedAt: Date.now() };
+      return title;
+    } catch(e){
+      return "YouTube Video";
+    }
+  }
+
+  // ---------- load playlist from data file ----------
+  async function loadPlaylistFromFile(){
+    trackList.innerHTML = "";
+    const rawLinks = (typeof MERA_PLAYLIST_LINKS !== "undefined") ? MERA_PLAYLIST_LINKS : [];
+    const seen = new Set();
+    const parsed = [];
+    rawLinks.forEach(raw => {
+      if (!raw) return;
+      const isObj = typeof raw === "object";
+      const linkStr = isObj ? raw.url : raw;
+      const category = isObj && raw.category ? raw.category : DEFAULT_CATEGORY;
+      if (!linkStr || !linkStr.trim()) return;
+      const url = extractUrl(linkStr);
+      const id = extractVideoId(url);
+      if (id && !seen.has(id)){ seen.add(id); parsed.push({ id, category }); }
+    });
+
+    if (!parsed.length){
+      tracks = [];
+      trackCount.textContent = 0;
+      emptyState.classList.remove("hidden");
+      renderCategoryFilters();
+      return;
+    }
+    emptyState.classList.add("hidden");
+
+    // show skeleton placeholders while titles load
+    tracks = parsed.map(p => ({ videoId: p.id, category: p.category, title: "Loading…", thumb: `https://img.youtube.com/vi/${p.id}/hqdefault.jpg`, loading: true }));
+    trackCount.textContent = tracks.length;
+    renderCategoryFilters();
+    render();
+    tryRestorePlayback();
+
+    const cache = loadTitleCache();
+    await Promise.all(tracks.map(async (t) => {
+      t.title = await fetchTitle(t.videoId, cache);
+      t.loading = false;
+    }));
+    saveTitleCache(cache);
+    renderCategoryFilters();
+    render();
+    if (currentIndex > -1 && tracks[currentIndex]){
+      nowTitle.textContent = tracks[currentIndex].title;
+      miniTitle.textContent = tracks[currentIndex].title;
+    }
+  }
+
+  btnRefresh.addEventListener("click", () => loadPlaylistFromFile());
+
+  // ---------- render ----------
+  function escapeHtml(str){
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function render(){
+    trackCount.textContent = tracks.length;
+    trackList.innerHTML = "";
+
+    const visibleTracks = activeCategory === "Sab" ? tracks : tracks.filter(t => (t.category || DEFAULT_CATEGORY) === activeCategory);
+
+    if (tracks.length && !visibleTracks.length){
+      const li = document.createElement("li");
+      li.className = "text-sm text-center py-8";
+      li.style.color = "var(--muted)";
+      li.textContent = `No tracks in the "${activeCategory}" category.`;
+      trackList.appendChild(li);
+      return;
+    }
+
+    visibleTracks.forEach((t) => {
+      const i = tracks.indexOf(t);
+      const li = document.createElement("li");
+      li.className = "track-row fade-in flex items-center gap-3 rounded-xl px-3 py-2.5 cursor-pointer transition group border";
+      li.style.backgroundColor = "var(--surface)";
+      li.style.borderColor = "var(--edge)";
+      if (i === currentIndex) li.classList.add("active");
+      li.dataset.index = i;
+
+      if (editingIndex === i){
+        const catOptions = Array.from(new Set([...SUGGESTED_CATEGORIES, t.category || DEFAULT_CATEGORY]))
+          .map(c => `<option value="${escapeHtml(c)}" ${c === t.category ? "selected" : ""}>${escapeHtml(c)}</option>`).join("");
+        li.innerHTML = `
+          <div class="w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden shrink-0" style="background-color:var(--surface2)">
+            <img src="${t.thumb}" alt="" class="w-full h-full object-cover">
+          </div>
+          <div class="min-w-0 flex-1 flex items-center gap-2">
+            <select class="edit-cat-select text-sm rounded-lg px-2 py-1.5 border flex-1 min-w-0" style="background-color:var(--surface2); border-color:var(--edge); color:var(--ink)">${catOptions}</select>
+            <button class="save-cat-btn row-icon-btn" title="Save"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>
+            <button class="cancel-cat-btn row-icon-btn" title="Cancel"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+        `;
+        li.querySelector(".save-cat-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          const newCat = li.querySelector(".edit-cat-select").value;
+          saveCategoryEdit(i, newCat);
+        });
+        li.querySelector(".cancel-cat-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          editingIndex = -1;
+          render();
+        });
+        trackList.appendChild(li);
+        return;
+      }
+
+      const titleHtml = t.loading
+        ? `<span class="inline-block h-3.5 w-40 max-w-full rounded skeleton align-middle"></span>`
+        : escapeHtml(t.title);
+
+      li.innerHTML = `
+        <div class="relative w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden shrink-0" style="background-color:var(--surface2)">
+          <img src="${t.thumb}" alt="" class="w-full h-full object-cover" loading="lazy">
+          ${i === currentIndex ? `<div class="absolute inset-0 bg-black/40 flex items-center justify-center"><div class="eq${player && player.getPlayerState && player.getPlayerState() !== 1 ? ' paused' : ''}"><span></span><span></span><span></span></div></div>` : ""}
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-medium truncate" style="color:${i === currentIndex ? "var(--accent)" : "var(--ink)"}">${titleHtml}</p>
+          <div class="flex items-center gap-2">
+            <p class="text-[11px]" style="color:var(--muted)">Track ${i+1}</p>
+            <span class="cat-badge">${escapeHtml(t.category || DEFAULT_CATEGORY)}</span>
+          </div>
+        </div>
+        ${ownerUnlocked ? `
+          <button class="row-icon-btn edit-btn" title="Change category">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+          </button>
+          <button class="row-icon-btn danger remove-btn" title="Remove">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+        ` : `
+          <div class="shrink-0 opacity-70 group-hover:opacity-100 transition" style="color:var(--muted)">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          </div>
+        `}
+      `;
+
+      li.addEventListener("click", (e) => {
+        if (e.target.closest(".edit-btn") || e.target.closest(".remove-btn")) return;
+        playIndex(i);
+      });
+      const editBtn = li.querySelector(".edit-btn");
+      if (editBtn) editBtn.addEventListener("click", (e) => { e.stopPropagation(); editingIndex = i; render(); });
+      const removeBtn = li.querySelector(".remove-btn");
+      if (removeBtn) removeBtn.addEventListener("click", (e) => { e.stopPropagation(); confirmAndRemove(i); });
+
+      trackList.appendChild(li);
+    });
+  }
+
+  function renderCategoryFilters(){
+    const cats = Array.from(new Set(tracks.map(t => t.category || DEFAULT_CATEGORY)));
+    fillCategorySuggestions();
+    if (!cats.length){
+      categoryFilters.classList.add("hidden");
+      categoryFilters.innerHTML = "";
+      return;
+    }
+    if (activeCategory !== "Sab" && !cats.includes(activeCategory)) activeCategory = "Sab";
+    categoryFilters.classList.remove("hidden");
+    const chips = ["Sab", ...cats];
+    categoryFilters.innerHTML = chips.map(c =>
+      `<button class="cat-chip${c === activeCategory ? " active" : ""}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`
+    ).join("");
+    categoryFilters.querySelectorAll(".cat-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeCategory = btn.dataset.cat;
+        renderCategoryFilters();
+        render();
+      });
+    });
+  }
+
+  async function confirmAndRemove(i){
+    const t = tracks[i];
+    if (!confirm(`Remove "${t.title}" from the playlist?`)) return;
+    addStatus.textContent = "Removing...";
+    addStatus.style.color = "var(--muted)";
+    addPanel.classList.remove("hidden");
+    const ok = await removeEntryFromGithub(t.videoId);
+    if (ok){
+      const wasCurrent = i === currentIndex;
+      tracks.splice(i, 1);
+      if (wasCurrent){
+        if (player && player.stopVideo) player.stopVideo();
+        currentIndex = -1;
+        resetNowPlaying();
+      } else if (i < currentIndex){
+        currentIndex--;
+      }
+      addStatus.textContent = "Track removed ✓";
+      addStatus.style.color = "var(--accent)";
+      renderCategoryFilters();
+      render();
+    }
+  }
+
+  async function saveCategoryEdit(i, newCategory){
+    const t = tracks[i];
+    addPanel.classList.remove("hidden");
+    addStatus.textContent = "Updating category...";
+    addStatus.style.color = "var(--muted)";
+    const ok = await updateCategoryOnGithub(t.videoId, newCategory);
+    if (ok){
+      t.category = newCategory;
+      editingIndex = -1;
+      addStatus.textContent = "Category updated ✓";
+      addStatus.style.color = "var(--accent)";
+      renderCategoryFilters();
+      render();
+    } else {
+      editingIndex = -1;
+      render();
+    }
+  }
+
+  function resetNowPlaying(){
+    nowTitle.textContent = "No track selected";
+    nowSub.textContent = "Add a link below and hit play";
+    discEl.style.backgroundImage = "";
+    discEl.classList.remove("spinning");
+    setPlayIcon(false);
+    paintSeek(0);
+    timeCurrent.textContent = "0:00";
+    timeDuration.textContent = "0:00";
+    miniPlayer.classList.add("hidden");
+    updateBgBlur(null);
+  }
+
+  // ---------- youtube player ----------
+  const RESUME_KEY = "meraPlaylistResumeState_v1";
+  let pendingResume = null; // {videoId, positionSec} read from storage, consumed once tracks+player are ready
+  let resumeAttempted = false;
+
+  window.onYouTubeIframeAPIReady = function(){
+    player = new YT.Player("yt-player-mount", {
+      height: "0", width: "0",
+      playerVars: { playsinline: 1 },
+      events: {
+        onReady: () => { playerReady = true; player.setVolume(Number(volumeEl.value)); tryRestorePlayback(); },
+        onStateChange: onPlayerStateChange,
+        onError: onPlayerError
+      }
+    });
+  };
+
+  function onPlayerError(e){
+    const code = e.data;
+    let msg = "This video couldn't be played.";
+    if (code === 101 || code === 150) msg = "The owner has disabled embedding for this video — it'll only play on YouTube itself, not in this player.";
+    else if (code === 100) msg = "This video wasn't found (it may be deleted or private).";
+    else if (code === 2) msg = "This video's link is invalid.";
+    else if (code === 5) msg = "A browser error occurred while playing this video.";
+
+    nowSub.textContent = msg;
+    nowSub.style.color = "var(--accent2)";
+    if (currentIndex > -1 && tracks[currentIndex]){
+      nowErrorLink.href = `https://www.youtube.com/watch?v=${tracks[currentIndex].videoId}`;
+      nowErrorLink.classList.remove("hidden");
+    }
+    setPlayIcon(false);
+    discEl.classList.remove("spinning");
+    stopProgressTimer();
+
+    // don't get stuck — auto-advance to the next track after a short pause
+    if (tracks.length > 1){
+      setTimeout(() => goNext(), 2500);
+    }
+  }
+
+  function onPlayerStateChange(e){
+    if (e.data === YT.PlayerState.PLAYING){
+      nowSub.style.color = "var(--muted)";
+      nowErrorLink.classList.add("hidden");
+      setPlayIcon(true); discEl.classList.add("spinning"); updateProgressOnce(); startProgressTimer();
+    } else if (e.data === YT.PlayerState.PAUSED){
+      setPlayIcon(false); discEl.classList.remove("spinning"); stopProgressTimer(); saveResumeState(true);
+    } else if (e.data === YT.PlayerState.ENDED){
+      handleTrackEnd();
+    } else if (e.data === YT.PlayerState.CUED){
+      setTimeout(updateProgressOnce, 250);
+    }
+    updateEqStates();
+  }
+
+  function loadResumeState(){
+    try { return JSON.parse(localStorage.getItem(RESUME_KEY)); } catch(e){ return null; }
+  }
+  function saveResumeState(force){
+    if (!playerReady || currentIndex === -1 || !player.getCurrentTime) return;
+    const t = tracks[currentIndex];
+    if (!t) return;
+    const pos = player.getCurrentTime() || 0;
+    localStorage.setItem(RESUME_KEY, JSON.stringify({ videoId: t.videoId, positionSec: pos, updatedAt: Date.now() }));
+  }
+  function tryRestorePlayback(){
+    if (resumeAttempted || !playerReady || !tracks.length) return;
+    const saved = loadResumeState();
+    if (!saved || !saved.videoId) { resumeAttempted = true; return; }
+    const idx = tracks.findIndex(t => t.videoId === saved.videoId);
+    if (idx === -1) { resumeAttempted = true; return; }
+    resumeAttempted = true;
+    currentIndex = idx;
+    const t = tracks[idx];
+    player.cueVideoById({ videoId: t.videoId, startSeconds: Math.max(0, saved.positionSec - 1) });
+    nowTitle.textContent = t.title;
+    nowSub.textContent = "Ready right where you left off — hit play";
+    discEl.style.backgroundImage = `url('${t.thumb}')`;
+    miniPlayer.classList.remove("hidden");
+    miniThumb.style.backgroundImage = `url('${t.thumb}')`;
+    miniTitle.textContent = t.title;
+    updateMediaSessionMetadata(t);
+    updateBgBlur(t.thumb);
+    render();
+  }
+
+  // periodic + lifecycle saves so refresh/close doesn't lose position
+  window.addEventListener("pagehide", () => saveResumeState(true));
+  window.addEventListener("beforeunload", () => saveResumeState(true));
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") saveResumeState(true); });
+
+  function handleTrackEnd(){
+    localStorage.removeItem(RESUME_KEY);
+    if (repeatMode === "one"){ player.seekTo(0); player.playVideo(); return; }
+    goNext(true);
+  }
+
+  function updateBgBlur(thumb){
+    if (thumb){
+      bgBlurImage.style.backgroundImage = `url('${thumb}')`;
+      bgBlurImage.style.opacity = "1";
+    } else {
+      bgBlurImage.style.opacity = "0";
+    }
+  }
+
+  function playIndex(i){
+    if (i < 0 || i >= tracks.length) return;
+    if (!playerReady) { setTimeout(() => playIndex(i), 300); return; }
+    currentIndex = i;
+    resumeAttempted = true;
+    const t = tracks[i];
+    player.loadVideoById(t.videoId);
+    player.setVolume(Number(volumeEl.value));
+    nowTitle.textContent = t.title;
+    nowSub.textContent = "Now playing";
+    nowSub.style.color = "var(--muted)";
+    nowErrorLink.classList.add("hidden");
+    discEl.style.backgroundImage = `url('${t.thumb}')`;
+    miniPlayer.classList.remove("hidden");
+    miniThumb.style.backgroundImage = `url('${t.thumb}')`;
+    miniTitle.textContent = t.title;
+    updateMediaSessionMetadata(t);
+    updateBgBlur(t.thumb);
+    localStorage.setItem(RESUME_KEY, JSON.stringify({ videoId: t.videoId, positionSec: 0, updatedAt: Date.now() }));
+    render();
+  }
+
+  function setPlayIcon(playing){
+    iconPlay.classList.toggle("hidden", playing);
+    iconPause.classList.toggle("hidden", !playing);
+    miniIconPlay.classList.toggle("hidden", playing);
+    miniIconPause.classList.toggle("hidden", !playing);
+    if ("mediaSession" in navigator){
+      navigator.mediaSession.playbackState = playing ? "playing" : "paused";
+    }
+  }
+
+  function updateEqStates(){
+    document.querySelectorAll(".eq").forEach(eq => {
+      eq.classList.toggle("paused", !(player && player.getPlayerState && player.getPlayerState() === 1));
+    });
+  }
+
+  // ---------- media session (lock screen controls) ----------
+  function updateMediaSessionMetadata(t){
+    if (!("mediaSession" in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: t.title,
+      artist: "Mera Playlist",
+      album: "Reehan MP",
+      artwork: [
+        { src: t.thumb, sizes: "480x360", type: "image/jpeg" },
+        { src: t.thumb, sizes: "320x180", type: "image/jpeg" }
+      ]
+    });
+  }
+  function setupMediaSessionHandlers(){
+    if (!("mediaSession" in navigator)) return;
+    try {
+      navigator.mediaSession.setActionHandler("play", () => { if (playerReady) player.playVideo(); });
+      navigator.mediaSession.setActionHandler("pause", () => { if (playerReady) player.pauseVideo(); });
+      navigator.mediaSession.setActionHandler("previoustrack", () => goPrev());
+      navigator.mediaSession.setActionHandler("nexttrack", () => goNext());
+      navigator.mediaSession.setActionHandler("seekto", (details) => {
+        if (playerReady && player.getDuration && !details.fastSeek){
+          player.seekTo(details.seekTime, true);
+        }
+      });
+      navigator.mediaSession.setActionHandler("stop", () => { if (playerReady) player.pauseVideo(); });
+    } catch(e){ /* some browsers don't support all handlers - ignore */ }
+  }
+
+  // ---------- controls ----------
+  btnPlay.addEventListener("click", togglePlay);
+  miniPlay.addEventListener("click", togglePlay);
+
+  function togglePlay(){
+    if (currentIndex === -1){ if (tracks.length) playIndex(0); return; }
+    if (!playerReady) return;
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+    else player.playVideo();
+  }
+
+  function goNext(){
+    if (!tracks.length) return;
+    let nextIndex;
+    if (shuffleOn && tracks.length > 1){
+      do { nextIndex = Math.floor(Math.random() * tracks.length); } while (nextIndex === currentIndex);
+    } else {
+      nextIndex = (currentIndex + 1) % tracks.length;
+    }
+    playIndex(nextIndex);
+  }
+  function goPrev(){
+    if (!tracks.length) return;
+    if (player && player.getCurrentTime && player.getCurrentTime() > 3){ player.seekTo(0); return; }
+    const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+    playIndex(prevIndex);
+  }
+
+  btnNext.addEventListener("click", () => goNext());
+  btnPrev.addEventListener("click", goPrev);
+  miniNext.addEventListener("click", () => goNext());
+  miniPrev.addEventListener("click", goPrev);
+
+  btnShuffle.addEventListener("click", () => {
+    shuffleOn = !shuffleOn;
+    btnShuffle.style.color = shuffleOn ? "var(--accent)" : "var(--muted)";
+    savePrefs();
+  });
+  btnRepeat.addEventListener("click", () => {
+    repeatMode = repeatMode === "one" ? "off" : "one";
+    btnRepeat.style.color = repeatMode === "one" ? "var(--accent)" : "var(--muted)";
+    repeatOneDot.classList.toggle("hidden", repeatMode !== "one");
+    savePrefs();
+  });
+
+  // volume
+  volumeEl.addEventListener("input", () => {
+    const v = Number(volumeEl.value);
+    volumeVal.textContent = v;
+    volumeEl.style.setProperty("--fill", v + "%");
+    if (playerReady) player.setVolume(v);
+    iconVol.classList.toggle("hidden", v === 0);
+    iconMute.classList.toggle("hidden", v !== 0);
+    if (v > 0) lastVolume = v;
+    savePrefs();
+  });
+  btnMute.addEventListener("click", () => {
+    if (Number(volumeEl.value) > 0){ lastVolume = Number(volumeEl.value); volumeEl.value = 0; }
+    else volumeEl.value = lastVolume || 70;
+    volumeEl.dispatchEvent(new Event("input"));
+  });
+
+  // seek
+  seekEl.addEventListener("input", () => { isSeeking = true; paintSeek(Number(seekEl.value)); });
+  seekEl.addEventListener("change", () => {
+    if (playerReady && player.getDuration){
+      const dur = player.getDuration();
+      player.seekTo(dur * (Number(seekEl.value)/100), true);
+    }
+    isSeeking = false;
+  });
+
+  function paintSeek(pct){
+    seekEl.value = pct;
+    const grad = `linear-gradient(to right, var(--accent) ${pct}%, var(--slider-track) ${pct}%)`;
+    seekEl.style.background = grad;
+  }
+  let lastResumeSave = 0;
+  function updateProgressOnce(){
+    if (!playerReady || isSeeking || !player.getDuration) return;
+    const dur = player.getDuration() || 0;
+    const cur = player.getCurrentTime() || 0;
+    const pct = dur ? Math.min(100, Math.max(0, (cur/dur)*100)) : 0;
+    paintSeek(pct);
+    timeCurrent.textContent = fmtTime(cur);
+    timeDuration.textContent = fmtTime(dur);
+    miniProgress.style.width = pct + "%";
+    const now = Date.now();
+    if (now - lastResumeSave > 4000){ lastResumeSave = now; saveResumeState(); }
+    if ("mediaSession" in navigator && "setPositionState" in navigator.mediaSession && dur > 0){
+      try { navigator.mediaSession.setPositionState({ duration: dur, playbackRate: 1, position: Math.min(cur, dur) }); } catch(e){}
+    }
+  }
+  function startProgressTimer(){
+    stopProgressTimer();
+    progressTimer = setInterval(updateProgressOnce, 400);
+  }
+  function stopProgressTimer(){ if (progressTimer) clearInterval(progressTimer); progressTimer = null; }
+
+  // ---------- init ----------
+  loadPrefs();
+  volumeEl.style.setProperty("--fill", volumeEl.value + "%");
+  volumeVal.textContent = volumeEl.value;
+  btnRepeat.style.color = repeatMode === "one" ? "var(--accent)" : "var(--muted)";
+  repeatOneDot.classList.toggle("hidden", repeatMode !== "one");
+  btnShuffle.style.color = shuffleOn ? "var(--accent)" : "var(--muted)";
+
+  // ---------- swipe gestures (mobile: swipe disc to skip next/prev) ----------
+  const swipeZone = document.getElementById("swipe-zone");
+  const swipeHint = document.getElementById("swipe-hint");
+  const SWIPE_HINT_KEY = "meraPlaylistSwipeHintShown_v1";
+  const SWIPE_THRESHOLD = 50;
+  let touchStartX = 0, touchStartY = 0, touchDeltaX = 0, isSwiping = false;
+
+  swipeZone.addEventListener("touchstart", (e) => {
+    if (!e.touches.length) return;
+    const t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchDeltaX = 0;
+    isSwiping = true;
+    discEl.style.transition = "none";
+  }, { passive: true });
+
+  swipeZone.addEventListener("touchmove", (e) => {
+    if (!isSwiping || !e.touches.length) return;
+    const t = e.touches[0];
+    touchDeltaX = t.clientX - touchStartX;
+    const deltaY = t.clientY - touchStartY;
+    if (Math.abs(touchDeltaX) > Math.abs(deltaY)){
+      const clamped = Math.max(-60, Math.min(60, touchDeltaX));
+      discEl.style.transform = `translateX(${clamped}px) scale(0.96)`;
+      discEl.style.opacity = String(1 - Math.abs(clamped) / 150);
+    }
+  }, { passive: true });
+
+  swipeZone.addEventListener("touchend", () => {
+    if (!isSwiping) return;
+    isSwiping = false;
+    discEl.style.transition = "transform .25s ease, opacity .25s ease";
+    discEl.style.transform = "";
+    discEl.style.opacity = "";
+    if (touchDeltaX <= -SWIPE_THRESHOLD && tracks.length) goNext();
+    else if (touchDeltaX >= SWIPE_THRESHOLD && tracks.length) goPrev();
+    touchDeltaX = 0;
+  });
+
+  if ("ontouchstart" in window && shouldShowSwipeHint()){
+    setTimeout(() => {
+      swipeHint.classList.remove("hidden");
+      requestAnimationFrame(() => { swipeHint.style.opacity = "1"; });
+      setTimeout(() => {
+        swipeHint.style.opacity = "0";
+        setTimeout(() => swipeHint.classList.add("hidden"), 450);
+      }, 3200);
+      localStorage.setItem(SWIPE_HINT_KEY, "1");
+    }, 1200);
+  }
+  function shouldShowSwipeHint(){ return localStorage.getItem(SWIPE_HINT_KEY) !== "1"; }
+
+  loadPlaylistFromFile();
+  setupMediaSessionHandlers();
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+    if (e.code === "Space"){ e.preventDefault(); togglePlay(); }
+    if (e.code === "ArrowRight"){ goNext(); }
+    if (e.code === "ArrowLeft"){ goPrev(); }
+  });
+})();
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+/* ===== PWA: install button + service worker ===== */
+(function(){
+  const btn=document.getElementById("install-btn");
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  let deferred=null;
+  const show=()=>{ if(!standalone) btn.style.display="inline-flex"; };
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(isIOS) show();
+  window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; show(); });
+  window.addEventListener("appinstalled",()=>{ btn.style.display="none"; deferred=null; });
+  function help(){
+    const o=document.createElement("div");
+    o.style.cssText="position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;padding:16px";
+    const msg=isIOS?"Tap the <b>Share</b> button in Safari, then choose <b>Add to Home Screen</b>.":"Open the browser menu (&#8942;) and tap <b>Install app</b> or <b>Add to Home screen</b>. The site must be opened over HTTPS.";
+    o.innerHTML='<div style="max-width:420px;width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--edge);border-radius:20px;padding:20px"><div style="font-weight:700;font-size:18px">Install Mera Playlist</div><p style="margin:10px 0 16px;color:var(--muted);line-height:1.5">'+msg+'</p><button style="width:100%;height:44px;border-radius:12px;font-weight:600;background:var(--accent);color:var(--bg)">Got it</button></div>';
+    o.addEventListener("click",ev=>{ if(ev.target===o||ev.target.tagName==="BUTTON") o.remove(); });
+    document.body.appendChild(o);
+  }
+  btn.addEventListener("click",async()=>{
+    if(deferred){ deferred.prompt(); await deferred.userChoice; deferred=null; btn.style.display="none"; }
+    else help();
+  });
+  if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+})();
+</script>
+</body>
+</html>
